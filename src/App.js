@@ -1,23 +1,38 @@
-import logo from './logo.svg';
+import { useState } from 'react';
+import Form from './components/Form';
+import Item from './components/Item';
 import './App.css';
 
+let contId = 1;
+
 function App() {
+  const [todos, setTodos] = useState([
+    {
+      text: contId + " - "  + "Tarea X",
+      id: contId,
+    },
+  ]);
+
+  const addTodo = (task) => {
+    contId++;
+    const newTodos = [...todos, { text: contId + " - " + task, id: contId}];
+    setTodos(newTodos);
+  };
+
+  const removeTodo = (id) => {
+    todos.splice( todos.findIndex( todo => todo.id === id ), 1 );
+    setTodos([...todos]);
+  };
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <h1>Todo List</h1>
+      <Form addTodo={ addTodo }/>
+      <div className="todo-list">
+        {todos.map((todo) => (
+          <Item todo={todo} removeTodo={ removeTodo }/>
+        ))}
+      </div>
     </div>
   );
 }
